@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio of Richard, a Travel and Tours Agent offering ticketing, hotel reservations, and more.">
+    <meta name="keywords" content="travel agent, portfolio, Richard, R2CAZ Travel and Tours">
+    <title>Richard's Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <style>
+        :root {
+            --primary-color: rgb(33, 109, 196);
+            --secondary-color: white;
+            --bg-dark: rgb(1, 8, 68);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            color: var(--secondary-color);
+            background: black;
+        }
+
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+
+        .loader::after {
+            content: '';
+            width: 40px;
+            height: 40px;
+            border: 5px solid var(--primary-color);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loaded .loader {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 5%;
+            background-color: var(--bg-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 25px;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 600;
+            opacity: 0;
+            animation: slideRight 1s ease-in-out forwards;
+        }
+
+        .logo-img {
+            height: 60px;
+            border-radius: 35px;
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .toggle-bar {
+            display: none;
+        }
+
+        #toggle-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--secondary-color);
+            cursor: pointer;
+            padding: 10px;
+            transition: color 0.3s;
+        }
+
+        #toggle-btn:hover, #toggle-btn:focus {
+            color: #b30000;
+        }
+
+        @media (max-width: 768px) {
+            .toggle-bar {
+                display: block;
+            }
+        }
+
+        .navbar {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .navbar.active {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background-color: var(--bg-dark);
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar a {
+            display: inline-block;
+            font-size: 25px;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 35px;
+            transition: 0.3s;
+            opacity: 0;
+            animation: slideTop 0.5s ease forwards;
+            animation-delay: calc(0.2s * var(--i));
+        }
+
+        .navbar a:hover, .navbar a:focus {
+            color: var(--primary-color);
+            outline: none;
+        }
+
+        @media (max-width: 768px) {
+            .navbar a {
+                display: block;
+                margin: 10px 0;
+                text-align: center;
+                margin-left: 0;
+            }
+        }
+
+        .home {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            padding: 70px 5% 0;
+        }
+
+        .home-content {
+            max-width: 600px;
+        }
+
+        .home-content h3 {
+            font-size: 32px;
+            font-weight: 700;
+            opacity: 0;
+            animation: slideBottom 1s ease forwards;
+            animation-delay: 0.7s;
+        }
+
+        .home-content h3:nth-of-type(2) {
+            margin-bottom: 30px;
+            animation: slideTop 1s ease forwards;
+            animation-delay: 0.7s;
+        }
+
+        .home-content h3 span {
+            color: var(--primary-color);
+        }
+
+        .home-content h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin: -3px 0;
+            opacity: 0;
+            animation: slideTop 1s ease forwards;
+            animation-delay: 1s;
+        }
+
+        .home-content p {
+            font-size: 18px;
+            opacity: 0;
+            animation: slideLeft 1s ease forwards;
+            animation-delay: 1s;
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: 2px solid var(--secondary-color);
+            border-radius: 50%;
+            font-size: 20px;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: 0.5s ease;
+            opacity: 0;
+            animation: slideLeft 1s ease forwards;
+            animation-delay: calc(0.2s * var(--i));
+            margin: 30px 15px 30px 0;
+        }
+
+        .social-icons a:hover, .social-icons a:focus {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            box-shadow: 0 0 20px var(--primary-color);
+            outline: none;
+        }
+
+        .btn-box {
+            display: inline-block;
+            padding: 12px 28px;
+            background: var(--secondary-color);
+            border-radius: 40px;
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-decoration: none;
+            font-weight: 600;
+            opacity: 0;
+            animation: slideTop 1s ease forwards;
+            animation-delay: 2s;
+            box-shadow: 0 0 5px var(--secondary-color);
+        }
+
+        .btn-box:hover, .btn-box:focus {
+            box-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--secondary-color);
+            outline: none;
+        }
+
+        .about {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            align-items: center;
+            gap: 1.5rem;
+            padding: 70px 5%;
+        }
+
+        .about-img img {
+            max-width: 80%;
+            height: auto;
+            border-radius: 8px;
+            margin-left: 50px;
+        }
+
+        .about-text h2 {
+            font-size: 48px;
+        }
+
+        .about-text h2 span {
+            color: var(--primary-color);
+        }
+
+        .about-text h4 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            line-height: 1.7;
+            margin: 15px 0 30px;
+        }
+
+        .about-text p {
+            color: var(--secondary-color);
+            font-size: 18px;
+            line-height: 1.4;
+            margin-bottom: 4rem;
+        }
+
+        .services {
+            color: var(--secondary-color);
+            font-size: 18px;
+            line-height: 1.4;
+            margin-bottom: 4rem;
+            padding: 70px 5%;
+        }
+
+        .sub-title {
+            text-align: center;
+            font-size: 48px;
+            padding-bottom: 50px;
+        }
+
+        .sub-title span {
+            color: var(--primary-color);
+        }
+
+        .services-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-gap: 40px;
+            margin-top: 50px;
+        }
+
+        .services-list div {
+            background-color: transparent;
+            padding: 40px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 20px;
+            transition: background 0.5s, transform 0.5s;
+            box-shadow: 1px 1px 20px var(--secondary-color);
+        }
+
+        .services-list div i {
+            font-size: 50px;
+            margin-bottom: 30px;
+        }
+
+        .services-list div h2 {
+            font-size: 30px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .services-list div a {
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-size: 12px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        .read {
+            display: inline-block;
+            padding: 12px 28px;
+            background: var(--primary-color);
+            border-radius: 40px;
+            font-size: 16px;
+            color: var(--secondary immary-color);
+            letter-spacing: 1px;
+            text-decoration: none;
+            font-weight: 600;
+            opacity: 0;
+            animation: slideTop 1s ease forwards;
+            animation-delay: 2s;
+            box-shadow: 0 0 5px var(--secondary-color);
+        }
+
+        .read:hover, .read:focus {
+            box-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--secondary-color);
+            outline: none;
+        }
+
+        .services-list div:hover {
+            transform: translateY(-10px);
+        }
+
+        .contact {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            align-items: center;
+            gap: 3rem;
+            padding: 70px 5%;
+            margin-top: 100px;
+        }
+
+        .contact-text h2 {
+            font-size: 48px;
+            line-height: 1;
+            text-align: center;
+        }
+
+        .contact-text h2 span {
+            color: var(--primary-color);
+        }
+
+        .contact-text h4 {
+            margin: 15px 0;
+            color: var(--secondary-color);
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .contact-text p {
+            color: var(--secondary-color);
+            font-size: 18px;
+            line-height: 30px;
+            margin-bottom: 2rem;
+        }
+
+        .contact-list {
+            margin-bottom: 10px;
+        }
+
+        .contact-list li {
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .contact-list i {
+            display: inline-block;
+            color: var(--primary-color);
+            font-size: 20px;
+            font-weight: 600;
+            transition: all 0.4s ease;
+        }
+
+        .contact-list li a:hover, .contact-list li a:focus {
+            transform: scale(1.01) translateY(-5px);
+            color: var(--primary-color);
+            outline: none;
+        }
+
+        .contact-form form {
+            position: relative;
+        }
+
+        .contact-form form input, .contact-form form textarea {
+            border: none;
+            outline: none;
+            width: 90%;
+            padding: 18px;
+            background: rgb(150, 145, 145);
+            color: black;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .contact-form textarea {
+            resize: none;
+            height: 220px;
+        }
+
+        .contact-form form .send {
+            display: inline-block;
+            padding: 12px 28px;
+            background: var(--primary-color);
+            border-radius: 40px;
+            font-size: 16px;
+            color: var(--secondary-color);
+            letter-spacing: 1px;
+            text-decoration: none;
+            font-weight: 600;
+            opacity: 0;
+            animation: slideTop 1s ease forwards;
+            animation-delay: 2s;
+            box-shadow: 0 0 5px var(--secondary-color);
+        }
+
+        .contact-form form .send:hover, .contact-form form .send:focus {
+            box-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--secondary-color);
+            outline: none;
+        }
+
+        .footer {
+            width: 100%;
+            text-align: center;
+            padding: 25px 0;
+            background: var(--bg-dark);
+            font-weight: 300;
+            margin-top: 70px;
+        }
+
+        .top {
+            position: fixed;
+            bottom: 2.1rem;
+            right: 2.1rem;
+        }
+
+        .top i {
+            color: black;
+            background: var(--primary-color);
+            font-size: 20px;
+            padding: 10px;
+            border-radius: 0.5rem;
+        }
+
+        /* Animations */
+        @keyframes slideRight {
+            0% { transform: translateX(-100px); opacity: 0; }
+            100% { transform: translateX(0px); opacity: 1; }
+        }
+
+        @keyframes slideLeft {
+            0% { transform: translateX(100px); opacity: 0; }
+            100% { transform: translateX(0px); opacity: 1; }
+        }
+
+        @keyframes slideTop {
+            0% { transform: translateY(100px); opacity: 0; }
+            100% { transform: translateY(0px); opacity: 1; }
+        }
+
+        @keyframes slideBottom {
+            0% { transform: translateY(-100px); opacity: 0; }
+            100% { transform: translateY(0px); opacity: 1; }
+        }
+
+        /* Media Queries */
+        @media (max-width: 1200px) {
+            .home-content h1 { font-size: 36px; }
+            .home-content p { font-size: 16px; }
+        }
+
+        @media (max-width: 992px) {
+            .navbar a { font-size: 22px; margin-left: 20px; }
+            .home-content h1 { font-size: 32px; }
+            .home-content p { font-size: 14px; }
+            .about { grid-template-columns: 1fr; }
+            .contact { grid-template-columns: 1fr; padding-left: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .home-content h3 { font-size: 28px; }
+            .home-content h1 { font-size: 28px; }
+            .home-content p { font-size: 14px; }
+            .contact-text h2 { font-size: 36px; }
+            .contact-text p { font-size: 16px; }
+            .contact-list i { font-size: 18px; }
+            .services-list div { padding: 30px; }
+        }
+
+        @media (max-width: 576px) {
+            .header { padding: 15px 2%; }
+            .navbar a { font-size: 18px; }
+            .home-content h3 { font-size: 24px; }
+            .home-content h1 { font-size: 24px; }
+            .home-content p { font-size: 12px; }
+            .about-img img { padding-bottom: 10%; margin-left: 0; }
+            .contact-text h2 { font-size: 32px; }
+            .contact-text p { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader"></div>
+    <header class="header">
+        <a href="#" class="logo">
+            <img src="img/logo-color.png" alt="Portfolio Logo" class="logo-img">
+            My Ebiznez
+        </a>
+        <div class="toggle-bar">
+            <button id="toggle-btn" aria-label="Toggle Menu">
+                <i class='bx bx-menu'></i>
+            </button>
+        </div>
+        <nav class="navbar">
+            <a href="#home" style="--i:1;" class="active">Home</a>
+            <a href="#about" style="--i:2;">About</a>
+            <a href="#services" style="--i:3;">Services</a>
+            <a href="#contact" style="--i:5;">Contact</a>
+        </nav>
+    </header>
+
+    <section class="home" id="home">
+        <div class="home-content">
+            <h3>Hello, You can call me</h3>
+            <h1>Richard</h1>
+            <h3>And I'm a <span class="text"></span></h3>
+            <p>Welcome to my portfolio! I specialize in providing top-notch travel and tour services through R2CAZ Travel and Tours.</p>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/maverickrichardsuniga?mibextid=ZbWKwL" style="--i:7" aria-label="Facebook"><i class='bx bxl-facebook-circle'></i></a>
+                <a href="https://biyaheko.ph" style="--i:8" aria-label="Biyaheko"><i class='bx bxs-briefcase'></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="about-img">
+            <img src="img/logo-color.png" alt="Richard's profile photo">
+        </div>
+        <div class="about-text">
+            <h2>About <span>Me</span></h2>
+            <h4>R2CAZ Travel and Tours Agent</h4>
+            <p>I'm Richard, a dedicated travel professional with a passion for creating memorable travel experiences. With years of experience in the industry, I offer personalized services to ensure your trips are seamless and enjoyable.</p>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <div class="container">
+            <h1 class="sub-title">Service <span>Offered</span></h1>
+            <div class="services-list">
+                <div>
+                    <i class='bx bxs-book' style='color:#126bbe'></i>
+                    <h2>International and Domestic Ticketing</h2>
+                    <p>Book flights to your dream destinations with ease and competitive prices.</p>
+                    <a href="#" class="read">Learn More</a>
+                </div>
+                <div>
+                    <i class='bx bxs-book' style='color:#126bbe'></i>
+                    <h2>Hotel and Resort Reservation</h2>
+                    <p>Secure comfortable accommodations tailored to your preferences.</p>
+                    <a href="#" class="read">Learn More</a>
+                </div>
+                <div>
+                    <i class='bx bxs-book' style='color:#126bbe'></i>
+                    <h2>Tour Promo & Packages</h2>
+                    <p>Explore curated tour packages for unforgettable adventures.</p>
+                    <a href="#" class="read">Learn More</a>
+                </div>
+                <div>
+                    <i class='bx bxs-book' style='color:#126bbe'></i>
+                    <h2>PSA, Passport & Visa Assistance</h2>
+                    <p>Get hassle-free assistance with travel documentation.</p>
+                    <a href="#" class="read">Learn More</a>
+                </div>
+                <div>
+                    <i class='bx bxs-book' style='color:#126bbe'></i>
+                    <h2>Ferries & Bus Reservation</h2>
+                    <p>Travel by sea or land with convenient booking options.</p>
+                    <a href="#" class="read">Learn More</a>
+                </div>
+                <div>
+                    <i class='bx bxs-book' style='color:#126bbe'></i>
+                    <h2>E-Loading, Bills Payment</h2>
+                    <p>Manage your payments and top-ups effortlessly.</p>
+                    <a href="#" class="read">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="contact-text">
+            <h2>Contact <span>Me</span></h2>
+            <h4>For More Info</h4>
+            <p>Feel free to reach out for inquiries, collaborations, or just to say hello! I'm always open to new opportunities and ideas.</p>
+            <div class="contact-list">
+                <li><i class="bx bxs-send"></i> c.cabana69@gmail.com</li>
+                <li><i class="bx bxs-send"></i> maverichard1226@gmail.com</li>
+                <li><i class="bx bxs-phone"></i> +63 977 606 6418</li>
+                <li><i class="bx bxs-phone"></i> +63 945 653 5761</li>
+            </div>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/maverickrichardsuniga?mibextid=ZbWKwL" aria-label="Facebook"><i class="bx bxl-facebook-circle"></i></a>
+                <a href="https://biyaheko.ph" aria-label="Biyaheko"><i class="bx bxs-briefcase"></i></a>
+            </div>
+        </div>
+        <div class="contact-form">
+            <form action= "https://api.web3forms.com/submit" method="POST">
+                <input type="hidden" name="access_key" value="27adf174-6149-456c-b10e-5b5714cab154">
+                <input type="text" name="name" placeholder="Enter Your Name" required>
+                <input type="email" name="email" placeholder="Enter Your Email" required>
+                <input type="text" name="subject" placeholder="Enter Your Subject">
+                <textarea name="message" placeholder="Enter Your Message" required></textarea>
+                <input type="submit" value="Submit" class="send">
+            </form>
+        </div>
+    </section>
+
+    <div class="footer">
+        <p>© 2024 Richard. All rights reserved.</p>
+    </div>
+
+    <a href="#" class="top"><i class="bx bx-up-arrow-alt"></i></a>
+
+    <script>
+        // Preloader
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+
+        // Typed.js
+        var typed = new Typed(".text", {
+            strings: ["R2CAZ Travel and Tours Agent", "Online Seller"],
+            typeSpeed: 100,
+            backSpeed: 100,
+            backDelay: 1000,
+            loop: true
+        });
+
+        // Toggle Menu
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('toggle-btn');
+            const navbar = document.querySelector('.navbar');
+            toggleBtn.addEventListener('click', () => {
+                navbar.classList.toggle('active');
+            });
+
+            // Smooth Scrolling
+            document.querySelectorAll('.navbar a').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+                    if (navbar.classList.contains('active')) {
+                        navbar.classList.remove('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
